@@ -33,7 +33,7 @@ module Main
     end
 
     def process_options
-      options = {}
+      options = { credentials: File.join(Dir.home, ".gaapi/ga-api-key") }
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: [options] VIEW_ID"
         opts.accept(Date)

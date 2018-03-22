@@ -158,8 +158,7 @@ class Query
 
   attr_reader :access_token, :dry_run, :query
 
-  def access_token_from_credentials(credentials)
-    credential_file_name = credentials || File.join(Dir.home, ".gaapi/ga-api-key")
+  def access_token_from_credentials(credential_file_name)
     stat = File::Stat.new(credential_file_name)
     if stat.world_readable? || stat.world_writable?
       raise "#{credential_file_name} must be readable and writable only by you."
