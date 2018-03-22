@@ -119,9 +119,13 @@ class Query
 
   def initialize(query_string, options)
     # puts "query_string: #{query_string}"
-    # puts "options: #{options.inspect}"
+    puts "Initializing query. Options: #{options.inspect}" if options[:debug]
 
+    puts "options[:access_token]: #{options[:access_token]}"
     @access_token = options[:access_token]
+    puts "options[:credentials]: #{options[:credentials]}"
+    @access_token ||= access_token_from_credentials(options[:credentials])
+    puts "Final access_token: #{access_token}"
     @dry_run = options[:dry_run]
 
     query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
@@ -153,4 +157,19 @@ class Query
   private
 
   attr_reader :access_token, :dry_run, :query
+
+  def access_token_from_credentials(credentials)
+    credential_file_name = credentials || File.join(Dir.home, ".gaapi/ga-api-key")
+    stat = File::Stat.new(credential_file_name)
+    if stat.world_readable? || stat.world_writable?
+      raise "#{credential_file_name} must be readable and writable only by you."
+    end
+    authorization = Google::Auth::ServiceAccountCredentials.make_creds(
+      json_key_io: File.open(credential_file_name),
+      scope: "https://www.googleapis.com/auth/analytics.readonly"
+    )
+    token = authorization.fetch_access_token!
+    puts token
+    token["access_token"]
+  end
 end
