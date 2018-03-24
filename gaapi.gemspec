@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "gaapi"
-  s.version     = "0.0.0alpha1"
+  s.version     = "0.0.1alpha1"
   s.date        = "2018-03-23"
   s.summary     = "Query Google Analytics from the command line."
   s.description = <<-EOF
@@ -22,4 +22,12 @@ Gem::Specification.new do |s|
   s.homepage =
     "https://github.com/weenhanceit/gaapi"
   s.license = "MIT"
-end
+  s.metadata = {
+    # "bug_tracker_uri"   => "https://example.com/user/bestgemever/issues",
+    # "changelog_uri"     => "https://example.com/user/bestgemever/CHANGELOG.md",
+    # "documentation_uri" => "https://www.example.info/gems/bestgemever/0.0.1",
+    # "homepage_uri"      => "https://bestgemever.example.io",
+    # "mailing_list_uri"  => "https://groups.example.com/bestgemever",
+    "source_code_uri"   => "https://github.com/weenhanceit/gaapi"
+    # "wiki_uri"          => "https://example.com/user/bestgemever/wiki"
+  }end
