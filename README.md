@@ -142,9 +142,7 @@ To use this type of credential with `gaapi`:
 3. Use the file name in the `--credentials` option when you run `gaapi`
 
 ## Installation
-There is not yet a proper gem for `gaapi`.
 
 ```
-git clone TBD
-gem install google-api-client --no-doc
+gem install gaapi --no-doc
 ```
