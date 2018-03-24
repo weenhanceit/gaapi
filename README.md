@@ -5,6 +5,8 @@
 
 `gaapi` supports two ways of providing credentials. One way is more useful while testing scripts or doing ad-hoc queries. The other is more appropriate for unattended script usage.
 
+Google provides a Ruby client library that builds queries by constructing them from Ruby objects. `gaapi` allows you to express queries as JSON. If you prefer the JSON format, you may prefer to use `gaapi`.
+
 ## Usage
 ```
 gaapi [options] VIEW_ID

@@ -1,5 +1,6 @@
 .vagrant
 *.gem
+.yardoc
 My Project*
 Jade Anal*
 Vagrantfile

@@ -86,6 +86,8 @@ class Query
       result
     end
 
+    # Convert a response from Google Analytics into a comma-separated values
+    # format file.
     def csv(result)
       result = result.to_json if result.is_a?(Google::Apis::AnalyticsreportingV4::GetReportsResponse)
       result = JSON.parse(result) if result.is_a?(String)
@@ -112,20 +114,36 @@ class Query
       end
     end
 
+    # Return the JSON result in a readable format.
+    # @param result [String] A string containing the JSON result from a query.
+    # @return [String] The JSON result formatted in a human-readable way.
     def pp(result)
       JSON.pretty_generate(JSON.parse(result))
     end
   end
 
+  # Create a Query object.
+  # @param access_token [String] A valid access token to make a request to
+  #   the specified View ID.
+  # @param credentials [String] File name of a credential file provided by
+  #   Google Analytics. To obtain a credential file, follow the instructions
+  #   at https://developers.google.com/identity/protocols/OAuth2ServiceAccount.
+  # @param dry_run [Boolean] If true, do everything except send the query to
+  #   Google Analytics.
+  # @param end_date [String] The end date for the report.
+  # @param query_file [IO] The query in JSON format.
+  # @param start_date [String] The start date for the report.
+  # @param view_id [String] The view ID of the property for with to submit the
+  #   query.
   def initialize(query_string, options)
     # puts "query_string: #{query_string}"
-    puts "Initializing query. Options: #{options.inspect}" if options[:debug]
+    # puts "Initializing query. Options: #{options.inspect}" if options[:debug]
 
-    puts "options[:access_token]: #{options[:access_token]}"
+    # puts "options[:access_token]: #{options[:access_token]}"
     @access_token = options[:access_token]
-    puts "options[:credentials]: #{options[:credentials]}"
+    # puts "options[:credentials]: #{options[:credentials]}"
     @access_token ||= access_token_from_credentials(options[:credentials])
-    puts "Final access_token: #{access_token}"
+    # puts "Final access_token: #{access_token}"
     @dry_run = options[:dry_run]
 
     query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
@@ -141,6 +159,8 @@ class Query
     # puts "query: #{JSON.pretty_generate(query)}"
   end
 
+  # Send the requested query to Google Analytics and return the response.
+  # @return [HTTPResponse] The response from the request.
   def execute
     uri = URI.parse("https://analyticsreporting.googleapis.com/v4/reports:batchGet")
     https = Net::HTTP.new(uri.host, uri.port)
@@ -168,7 +188,7 @@ class Query
       scope: "https://www.googleapis.com/auth/analytics.readonly"
     )
     token = authorization.fetch_access_token!
-    puts token
+    # puts token
     token["access_token"]
   end
 end
