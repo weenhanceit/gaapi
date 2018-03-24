@@ -1,4 +1,5 @@
 .vagrant
+*.gem
 My Project*
 Jade Anal*
 Vagrantfile
