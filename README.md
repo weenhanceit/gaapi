@@ -27,6 +27,34 @@ The VIEW_ID is what identifies the Google Analytics data (a view of a property).
     -s, --start-date START_DATE      Report including START_DATE.
 ```
 
+## Installation
+
+```
+gem install gaapi --no-doc
+```
+
+## Example
+Get the number of visitors to a site for January, 2018, with credentials previously obtained and store in `./credentials.json`:
+```
+gaapi -c ./credentials.json VIEW_ID
+{
+  "reportRequests": [{
+      "viewId": "VIEW_ID",
+      "dimensions": [{"name": "ga:date"}],
+      "dateRanges": [{
+        "startDate": "2017-10-01",
+        "endDate": "2017-10-31"
+      }],
+      "metrics": [{
+          "expression": "ga:users"
+      }],
+      "includeEmptyRows": true,
+      "hideTotals": false,
+      "hideValueRanges": true
+    }]
+}
+```
+
 ## Queries
 `gaapi` uses the Google Analytics Reporting API v4 (https://developers.google.com/analytics/devguides/reporting/core/v4/). An introduction to querying for GA data is here: https://developers.google.com/analytics/devguides/reporting/core/v4/basics.
 A very useful reference of the dimensions and metrics available is at: https://developers.google.com/analytics/devguides/reporting/core/dimsmets.
@@ -59,7 +87,7 @@ A query to find basic visit data for a web site is:
       "hideValueRanges": true
     },
     {
-      "viewId": "***REMOVED***",
+      "viewId": "VIEW_ID",
       "dimensions": [{"name": "ga:date"}],
       "dateRanges": [{
         "startDate": "2017-10-01",
