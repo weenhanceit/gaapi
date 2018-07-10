@@ -51,7 +51,7 @@ module Main
 
         opts.on("-c CREDENTIALS",
           "--credentials CREDENTIALS",
-          "Location of the credentials file. Default: #{options[:credentials]}.") do |credentials|
+          "Location of the credentials file. Default: `#{options[:credentials]}`.") do |credentials|
             options[:credentials] = credentials
           end
 
