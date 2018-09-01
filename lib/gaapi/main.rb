@@ -2,8 +2,6 @@
 
 require "optparse"
 
-##
-# Basic runner for nginx config file generation.
 module Main
   class << self
     def call

@@ -5,7 +5,7 @@
 
 `gaapi` supports two ways of providing credentials. One way is more useful while testing scripts or doing ad-hoc queries. The other is more appropriate for unattended script usage.
 
-Google provides a Ruby client library that builds queries by constructing them from Ruby objects. `gaapi` allows you to express queries as JSON. If you prefer the JSON format, you may prefer to use `gaapi`.
+Google provides a Ruby client library that builds queries by constructing them from Ruby objects. `gaapi` allows you to express queries as JSON. If you prefer the JSON format, you may prefer to use `gaapi`. If you want to deal with Ruby objects (which are likely more verbose than JSON), use the Google gem.
 
 ## Usage
 ```
@@ -13,13 +13,13 @@ gaapi [options] VIEW_ID
 ```
 If no query is specified on the command line, `gaapi` tries to read the query from standard input.
 
-The VIEW_ID is what identifies the Google Analytics data (a view of a property). Log in to GA, select the account of interest, select Admin (the gear near the bottom left of the page), and select "View Settings" (on the right of the page)
+The VIEW_ID is what identifies the Google Analytics data (a view of a property). Log in to GA, select the account of interest, select Admin (the gear near the bottom left of the page), and select "View Settings" (on the right of the page).
 
 ## Options
 ```
     -a, --access-token TOKEN         An access token obtained from https://developers.google.com/oauthplayground.
         --csv                        Output result as a csv file.
-    -c, --credentials CREDENTIALS    Location of the credentials file. Default: .
+    -c, --credentials CREDENTIALS    Location of the credentials file. Default: `.gaapi/ga-api-key`.
     -d, --debug                      Print debugging information.
     -e, --end-date END_DATE          Report including END_DATE.
     -n, --dry-run                    Don't actually send the query to Google.
@@ -34,7 +34,7 @@ gem install gaapi --no-doc
 ```
 
 ## Example
-Get the number of visitors to a site for January, 2018, with credentials previously obtained and store in `./credentials.json`:
+Get the number of visitors to a site for January, 2018, with credentials previously obtained and stored in `./credentials.json`:
 ```
 gaapi -c ./credentials.json VIEW_ID
 {
@@ -169,10 +169,4 @@ To use this type of credential with `gaapi`:
 
 1. Follow the instructions at: https://developers.google.com/identity/protocols/OAuth2ServiceAccount, choose a JSON format file, and when you're prompted to save a file, save it
 2. Immediately change the permissions of the file to make it readable only by you. On Linux, Unix, OSX that's `chmod 600 filename`.
-3. Use the file name in the `--credentials` option when you run `gaapi`
-
-## Installation
-
-```
-gem install gaapi --no-doc
-```
+3. Give the file name in the `--credentials` option when you run `gaapi`
