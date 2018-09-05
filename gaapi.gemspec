@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "minitest"
   s.add_development_dependency "webmock"
   s.add_runtime_dependency "google-api-client", "~> 0.19"
-  s.add_runtime_dependency "google-auth"
+  s.add_runtime_dependency "googleauth"
   s.authors     = ["Larry Reid", "Phil Carrillo"]
   s.email       = "larry.reid@weenhanceit.com"
   s.executables << "gaapi"

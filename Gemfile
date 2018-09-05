@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "google-api-client"
-gem "googleauth", "= 0.6.2"
+gem "googleauth"
 
 group :development do
   gem "webmock"
