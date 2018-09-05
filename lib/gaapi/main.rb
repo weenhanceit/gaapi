@@ -12,14 +12,14 @@ module Main
       # return unless (result = Query.call(options))
       query = Query.new((options[:query_file] || STDIN).read, options)
 
-      return if options[:dry_run]
+      return 0 if options[:dry_run]
 
       result = query.execute
 
       if result.code != "200"
         puts "Request failed #{result.code}"
         puts Query.pp(result.body)
-        return
+        return 1
       end
 
       case options[:output_format]
@@ -28,6 +28,8 @@ module Main
       else
         puts Query.pp(result.body)
       end
+
+      0
     end
 
     def process_options
