@@ -5,12 +5,17 @@ require "optparse"
 module Main
   class << self
     def call
-      options = process_options
+      return 1 if (options = process_options).nil?
 
       puts "options: #{options.inspect}" if options[:debug]
 
       # return unless (result = Query.call(options))
-      query = Query.new((options[:query_file] || STDIN).read, options)
+      begin
+        query = Query.new((options[:query_file] || $stdin).read, options)
+      rescue StandardError => e
+        $stderr.puts e.to_s # rubocop:disable Style/StderrPuts
+        return 1
+      end
 
       return 0 if options[:dry_run]
 
@@ -34,7 +39,7 @@ module Main
 
     def process_options
       options = { credentials: File.join(Dir.home, ".gaapi/ga-api-key") }
-      opts = OptionParser.new do |opts|
+      parsed_options = OptionParser.new do |opts|
         opts.banner = "Usage: [options] VIEW_ID"
         opts.accept(Date)
 
@@ -83,8 +88,11 @@ module Main
           options[:start_date] = start_date
         end
       end
-      opts.parse!
-      opts.abort("You must provide a view ID. \n" + opts.to_s) unless ARGV.size == 1
+      parsed_options.parse!
+      unless ARGV.size == 1
+        $stderr.puts("gaapi: You must provide a view ID.\n" + parsed_options.to_s) # rubocop:disable Style/StderrPuts
+        return nil
+      end
       options[:view_id] = ARGV[0]
 
       if options[:end_date].nil? && !options[:start_date].nil?

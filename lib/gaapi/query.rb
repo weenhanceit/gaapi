@@ -123,7 +123,7 @@ class Query
   end
 
   # Create a Query object.
-  # @param access_token [String] A valid access token to make a request to
+  # @param access_token [String] A valid access token with which to make a request to
   #   the specified View ID.
   # @param credentials [String] File name of a credential file provided by
   #   Google Analytics. To obtain a credential file, follow the instructions
@@ -133,7 +133,7 @@ class Query
   # @param end_date [String] The end date for the report.
   # @param query_file [IO] The query in JSON format.
   # @param start_date [String] The start date for the report.
-  # @param view_id [String] The view ID of the property for with to submit the
+  # @param view_id [String] The view ID of the property for which to submit the
   #   query.
   def initialize(query_string, options)
     # puts "query_string: #{query_string}"
