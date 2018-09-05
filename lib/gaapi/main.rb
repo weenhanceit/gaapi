@@ -23,7 +23,7 @@ module Main
 
       if result.code != "200"
         puts "Request failed #{result.code}"
-        puts Query.pp(result.body)
+        puts result.body
         return 1
       end
 

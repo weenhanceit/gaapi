@@ -5,3 +5,4 @@ $LOAD_PATH.unshift File.join(File.dirname(__FILE__), "..", "lib")
 require "gaapi"
 
 Main.call
+# FIXME: This doesn't seem to return the status to the shell the way we want.
