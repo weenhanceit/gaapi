@@ -9,7 +9,7 @@ class RunnerTest < Test
 
   def test_no_view
     assert_output "", /gaapi: You must provide a view ID./ do
-      status = Main.call
+      status = GAAPI::Main.call
       refute status.zero?
     end
   end
@@ -19,7 +19,7 @@ class RunnerTest < Test
     assert_output "", /unexpected token at 'bogus'/ do
       begin
         $stdin = StringIO.new("bogus")
-        status = Main.call
+        status = GAAPI::Main.call
         refute status.zero?
       ensure
         $stdin = STDIN
@@ -32,7 +32,7 @@ class RunnerTest < Test
       .with(body: /endDate/, headers: { "Authorization" => "Bearer not_the_right_token" })
       .to_return(body: "Authorization failed", status: 401)
     ARGV.concat(%w[-q basic.json -a not_the_right_token -d 888888])
-    status = Main.call
+    status = GAAPI::Main.call
     refute status.zero?
   end
 
@@ -41,7 +41,7 @@ class RunnerTest < Test
       .with(body: /endDate/, headers: { "Authorization" => "Bearer asldkjfalkdfj" })
       .to_return(body: "{}", status: 200)
     ARGV.concat(%w[-q basic.json -a asldkjfalkdfj -d 888888])
-    status = Main.call
+    status = GAAPI::Main.call
     assert status.zero?
   end
 end
