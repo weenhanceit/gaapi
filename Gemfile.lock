@@ -61,7 +61,7 @@ PLATFORMS
 
 DEPENDENCIES
   google-api-client
-  googleauth
+  googleauth (= 0.6.2)
   webmock
 
 BUNDLED WITH
