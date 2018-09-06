@@ -5,43 +5,6 @@ require "net/http"
 
 module GAAPI
   class Query
-    class << self
-      # Convert a response from Google Analytics into a comma-separated values
-      # format file.
-      def csv(result)
-        result = result.to_json if result.is_a?(Google::Apis::AnalyticsreportingV4::GetReportsResponse)
-        result = JSON.parse(result) if result.is_a?(String)
-        CSV.generate do |csv|
-          result["reports"].each do |report|
-            # puts report.column_header.dimensions.inspect
-            # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
-            csv << csv_header_row(report)
-            report["data"]["rows"].each do |row|
-              csv << csv_data_row(row["dimensions"], row["metrics"])
-            end
-            csv << csv_data_row("Totals", report["data"]["totals"]) if report["data"]["totals"]
-          end
-        end
-      end
-
-      def csv_data_row(row_headers, metrics)
-        (Array(row_headers) || []) + metrics[0]["values"]
-      end
-
-      def csv_header_row(report)
-        (report["columnHeader"]["dimensions"] || []) + report["columnHeader"]["metricHeader"]["metricHeaderEntries"].map do |entry|
-          entry["name"]
-        end
-      end
-
-      # Return the JSON result in a readable format.
-      # @param result [String] A string containing the JSON result from a query.
-      # @return [String] The JSON result formatted in a human-readable way.
-      def pp(result)
-        JSON.pretty_generate(JSON.parse(result))
-      end
-    end
-
     # Create a Query object.
     # @param access_token [String] A valid access token with which to make a request to
     #   the specified View ID.
@@ -56,12 +19,7 @@ module GAAPI
     # @param view_id [String] The view ID of the property for which to submit the
     #   query.
     def initialize(query_string, options, access_token: nil)
-      # puts "query_string: #{query_string}"
-      # puts "Initializing query. Options: #{options.inspect}" if options[:debug]
-
-      # puts "options[:access_token]: #{options[:access_token]}"
       @access_token = access_token || options[:access_token]
-      # puts "options[:credentials]: #{options[:credentials]}"
       @dry_run = options[:dry_run]
 
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)

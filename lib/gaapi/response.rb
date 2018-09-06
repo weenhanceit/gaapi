@@ -6,12 +6,12 @@ module GAAPI
   class Response
     attr_reader :response
 
-    # Raw body of the response, possibly only for transition purposes.
+    # Raw body of the response. Typically only used for diagnostic purposes.
     def body
       response.body
     end
 
-    # Raw code of the response, possibly only for transition purposes.
+    # Raw code of the response. Typically only used for diagnostic purposes.
     def code
       response.code
     end
@@ -21,8 +21,8 @@ module GAAPI
     # @return [String] The result of the query formatted as a comma-separated
     #   values string.
     def csv
-      result = JSON.parse(to_s)
-      CSV.generate do |csv|
+      result = to_json
+      @csv ||= CSV.generate do |csv|
         result["reports"].each do |report|
           # puts report.column_header.dimensions.inspect
           # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
@@ -42,17 +42,23 @@ module GAAPI
     # Return the JSON result in a readable format.
     # @return [String] The JSON result formatted in a human-readable way.
     def pp
-      JSON.pretty_generate(JSON.parse(to_s))
+      @pp ||= JSON.pretty_generate(to_json)
     end
 
-    def status
-      code
-    end
-
+    # Return true if the request was successful.
+    # @return [Boolean] True if the request was successful (response code 200).
     def success?
       code == "200"
     end
 
+    # Return the body of the response
+    # @return [String] JSON-formatted response in a String.
+    def to_json
+      @to_json ||= JSON.parse(to_s)
+    end
+
+    # Return the body of the response
+    # @return [String] JSON-formatted response in a String.
     def to_s
       response.body
     end
