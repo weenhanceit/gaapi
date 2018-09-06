@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.files = [
     "bin/gaapi",
     "lib/gaapi.rb",
+    "lib/gaapi/access_token.rb",
     "lib/gaapi/main.rb",
     "lib/gaapi/query.rb"
   ]

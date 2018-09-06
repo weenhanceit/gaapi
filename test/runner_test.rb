@@ -10,7 +10,7 @@ class RunnerTest < Test
   QUERY = <<~QUERY
     {
       "reportRequests": [{
-        "viewId": "3114200",
+        "viewId": "000000",
         "dimensions": [{"name": "ga:date"}],
         "dateRanges": [{
           "startDate": "2017-10-01",

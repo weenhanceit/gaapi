@@ -186,7 +186,10 @@ module GAAPI
         json_key_io: File.open(credential_file_name),
         scope: "https://www.googleapis.com/auth/analytics.readonly"
       )
+
+      puts "authorization: #{authorization.inspect}" # if options[:debug]
       token = authorization.fetch_access_token!
+      puts "token: #{token.inspect}" # if options[:debug]
       # puts token
       token["access_token"]
     end
