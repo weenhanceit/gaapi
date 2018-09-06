@@ -17,6 +17,7 @@ module GAAPI
             options[:access_token],
             options[:start_date],
             options[:end_date])
+          puts "query: #{query.inspect}" if options[:debug]
         rescue StandardError => e
           $stderr.puts e.message # rubocop:disable Style/StderrPuts
           return 1
@@ -25,8 +26,12 @@ module GAAPI
         return 0 if options[:dry_run]
 
         result = query.execute
+        puts "result: #{result.inspect}" if options[:debug]
 
-        return 1 unless result.success?
+        unless result.success?
+          puts result.pp
+          return 1
+        end
 
         case options[:output_format]
         when :csv

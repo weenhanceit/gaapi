@@ -45,14 +45,25 @@ class RunnerTest < Test
   end
 
   def test_authorization_failure
+    body = <<~BODY
+      {
+        "error": {
+          "code": 401,
+          "message": "Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.",
+          "status": "UNAUTHENTICATED"
+        }
+      }
+    BODY
     stub_request(:any, "https://analyticsreporting.googleapis.com/v4/reports:batchGet")
       .with(body: /endDate/, headers: { "Authorization" => "Bearer not_the_right_token" })
-      .to_return(body: "Authorization failed", status: 401)
+      .to_return(body: body, status: 401)
     ARGV.concat(%w[-a not_the_right_token 888888])
     begin
       $stdin = StringIO.new(QUERY)
-      status = GAAPI::Main.call
-      refute status.zero?
+      assert_output body do
+        status = GAAPI::Main.call
+        refute status.zero?
+      end
     ensure
       $stdin = STDIN
     end

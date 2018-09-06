@@ -21,6 +21,7 @@ module GAAPI
     def token
       (@token ||= fetch_access_token)["access_token"]
     end
+    alias to_s token
 
     private
 
