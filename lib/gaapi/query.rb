@@ -187,10 +187,9 @@ module GAAPI
         scope: "https://www.googleapis.com/auth/analytics.readonly"
       )
 
-      puts "authorization: #{authorization.inspect}" # if options[:debug]
+      # puts "authorization: #{authorization.inspect}" # if options[:debug]
       token = authorization.fetch_access_token!
-      puts "token: #{token.inspect}" # if options[:debug]
-      # puts token
+      # puts "token: #{token.inspect}" # if options[:debug]
       token["access_token"]
     end
   end
