@@ -16,11 +16,13 @@ module GAAPI
     private
 
     def fetch_access_token
-      authorization = Google::Auth::ServiceAccountCredentials.make_creds(
-        json_key_io: File.open(@credential_file),
-        scope: "https://www.googleapis.com/auth/analytics.readonly"
-      )
-      authorization.fetch_access_token!
+      File.open(@credential_file) do |fd|
+        authorization = Google::Auth::ServiceAccountCredentials.make_creds(
+          json_key_io: fd,
+          scope: "https://www.googleapis.com/auth/analytics.readonly"
+        )
+        authorization.fetch_access_token!
+      end
     end
   end
 end
