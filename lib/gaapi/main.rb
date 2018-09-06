@@ -9,8 +9,7 @@ module GAAPI
         begin
           return 1 if (options = process_options).nil?
         rescue Errno::ENOENT => e
-          # FIXME
-          $stderr.puts "daves_not_here_man.json: not found\n#{e}" # rubocop:disable Style/StderrPuts
+          $stderr.puts e.message # rubocop:disable Style/StderrPuts
           return 1
         end
 
@@ -22,7 +21,7 @@ module GAAPI
           options.delete(:access_token)
           query = Query.new((options[:query_file] || $stdin).read, options, access_token: access_token)
         rescue StandardError => e
-          $stderr.puts e.to_s # rubocop:disable Style/StderrPuts
+          $stderr.puts e.message # rubocop:disable Style/StderrPuts
           return 1
         end
 
