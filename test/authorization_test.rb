@@ -37,29 +37,26 @@ class AuthorizationTest < Test
   end
 
   def test_get_token_from_default_file
-    skip "Can't do this because we can't do oauth mocking."
+    skip "Can't do this because we can't chroot."
   end
 
   def test_get_token_from_specified_file
-    skip "Can't do this because we can't do oauth mocking."
-    # .with(body: /endDate/, headers: { "Authorization" => "Bearer not_the_right_token" })
     body = <<~ACCESS_TOKEN
       {
-        "access_token"=>"ya29.c.ElkQBv8eWyptfkADfqkPp9CifKK9PJhwa6fNo1_3vJ1FXZJ_6_3eOqcd-q7V8EmGkR-oPsyHE07WyeSKETVCdl-3bTf3Z4P9dANiUL99hEfKL9qr-DEJbtgoZw",
-        "expires_in"=>3600,
-        "token_type"=>"Bearer"
+        "access_token" : "ya29.c.ElkQBv8eWyptfkADfqkPp9CifKK9PJhwa6fNo1_3vJ1FXZJ_6_3eOqcd-q7V8EmGkR-oPsyHE07WyeSKETVCdl-3bTf3Z4P9dANiUL99hEfKL9qr-DEJbtgoZw",
+        "expires_in" : 3600,
+        "token_type" : "Bearer"
       }
     ACCESS_TOKEN
     stub_request(:post, "https://www.googleapis.com/oauth2/v4/token")
-      .to_return(body: body, status: 200)
+      .to_return(body: body, status: 200, headers: { "content-type": "application/json; charset=utf-8" })
     File.open("credential.json", "w") do |f|
       f << CREDENTIAL
     end
-    # access_token = GAAPI::AccessToken.new("Jade Analytics-fcb64a448d4b.json")
-    access_token = GAAPI::AccessToken.new("credential.json")
-    assert_equal "1234567890", access_token.token
-
-    flunk
+    File.chmod(0o600, "credential.json")
+    access_token = GAAPI::AccessToken.new("Jade Analytics-fcb64a448d4b.json")
+    # access_token = GAAPI::AccessToken.new("credential.json")
+    assert_equal "ya29.c.ElkQBv8eWyptfkADfqkPp9CifKK9PJhwa6fNo1_3vJ1FXZJ_6_3eOqcd-q7V8EmGkR-oPsyHE07WyeSKETVCdl-3bTf3Z4P9dANiUL99hEfKL9qr-DEJbtgoZw", access_token.token
   end
 
   def test_do_not_use_readable_file
