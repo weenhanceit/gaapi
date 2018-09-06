@@ -88,8 +88,7 @@ module GAAPI
         "Content-Type" => "application/json",
         "Authorization" => "Bearer #{access_token}")
       request.body = query.to_json
-      response = https.request(request)
-      response
+      Response.new(https.request(request))
     end
 
     private

@@ -29,15 +29,13 @@ module GAAPI
 
         result = query.execute
 
-        if result.code != "200"
-          return 1
-        end
+        return 1 unless result.success?
 
         case options[:output_format]
         when :csv
-          puts Query.csv(result.body)
+          puts result.csv
         else
-          puts Query.pp(result.body)
+          puts result.pp
         end
 
         0

@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
     "lib/gaapi.rb",
     "lib/gaapi/access_token.rb",
     "lib/gaapi/main.rb",
-    "lib/gaapi/query.rb"
+    "lib/gaapi/query.rb",
+    "lib/gaapi/response.rb"
   ]
   s.homepage =
     "https://github.com/weenhanceit/gaapi"
