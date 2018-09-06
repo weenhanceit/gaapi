@@ -71,4 +71,12 @@ class RunnerTest < Test
       $stdin = STDIN
     end
   end
+
+  def test_credential_file_missing
+    ARGV.concat(%w[-c daves_not_here_man.json 888888])
+    assert_output "", /daves_not_here_man.json: not found/ do
+      status = GAAPI::Main.call
+      refute status.zero?
+    end
+  end
 end

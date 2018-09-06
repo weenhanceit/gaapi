@@ -136,15 +136,13 @@ module GAAPI
     # @param start_date [String] The start date for the report.
     # @param view_id [String] The view ID of the property for which to submit the
     #   query.
-    def initialize(query_string, options)
+    def initialize(query_string, options, access_token: nil)
       # puts "query_string: #{query_string}"
       # puts "Initializing query. Options: #{options.inspect}" if options[:debug]
 
       # puts "options[:access_token]: #{options[:access_token]}"
-      @access_token = options[:access_token]
+      @access_token = access_token || options[:access_token]
       # puts "options[:credentials]: #{options[:credentials]}"
-      @access_token ||= access_token_from_credentials(options[:credentials])
-      # puts "Final access_token: #{access_token}"
       @dry_run = options[:dry_run]
 
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
@@ -178,19 +176,5 @@ module GAAPI
     private
 
     attr_reader :access_token, :dry_run, :query
-
-    def access_token_from_credentials(credential_file_name)
-      stat = File::Stat.new(credential_file_name)
-      raise "#{credential_file_name} must be readable and writable only by you." if stat.world_readable? || stat.world_writable?
-      authorization = Google::Auth::ServiceAccountCredentials.make_creds(
-        json_key_io: File.open(credential_file_name),
-        scope: "https://www.googleapis.com/auth/analytics.readonly"
-      )
-
-      # puts "authorization: #{authorization.inspect}" # if options[:debug]
-      token = authorization.fetch_access_token!
-      # puts "token: #{token.inspect}" # if options[:debug]
-      token["access_token"]
-    end
   end
 end

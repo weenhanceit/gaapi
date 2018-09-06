@@ -6,13 +6,21 @@ module GAAPI
   module Main
     class << self
       def call
-        return 1 if (options = process_options).nil?
+        begin
+          return 1 if (options = process_options).nil?
+        rescue Errno::ENOENT => e
+          # FIXME
+          $stderr.puts "daves_not_here_man.json: not found\n#{e}" # rubocop:disable Style/StderrPuts
+          return 1
+        end
 
         puts "options: #{options.inspect}" if options[:debug]
 
         # return unless (result = Query.call(options))
         begin
-          query = Query.new((options[:query_file] || $stdin).read, options)
+          access_token = options[:access_token]
+          options.delete(:access_token)
+          query = Query.new((options[:query_file] || $stdin).read, options, access_token: access_token)
         rescue StandardError => e
           $stderr.puts e.to_s # rubocop:disable Style/StderrPuts
           return 1
@@ -95,6 +103,8 @@ module GAAPI
           return nil
         end
         options[:view_id] = ARGV[0]
+
+        options[:access_token] ||= GAAPI::AccessToken.new(options[:credentials])
 
         if options[:end_date].nil? && !options[:start_date].nil?
           options[:end_date] = options[:start_date]
