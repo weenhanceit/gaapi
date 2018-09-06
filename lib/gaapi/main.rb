@@ -8,18 +8,15 @@ module GAAPI
       def call
         begin
           return 1 if (options = process_options).nil?
-        rescue Errno::ENOENT => e
-          $stderr.puts e.message # rubocop:disable Style/StderrPuts
-          return 1
-        end
 
-        puts "options: #{options.inspect}" if options[:debug]
+          puts "options: #{options.inspect}" if options[:debug]
 
-        # return unless (result = Query.call(options))
-        begin
-          access_token = options[:access_token]
-          options.delete(:access_token)
-          query = Query.new((options[:query_file] || $stdin).read, options, access_token: access_token)
+          # return unless (result = Query.call(options))
+          query = Query.new((options[:query_file] || $stdin).read,
+            options[:view_id],
+            options[:access_token],
+            options[:start_date],
+            options[:end_date])
         rescue StandardError => e
           $stderr.puts e.message # rubocop:disable Style/StderrPuts
           return 1
@@ -42,7 +39,8 @@ module GAAPI
       end
 
       def process_options
-        options = { credentials: File.join(Dir.home, ".gaapi/ga-api-key") }
+        options = {}
+        credential_file = File.join(Dir.home, ".gaapi/ga-api-key")
         parsed_options = OptionParser.new do |opts|
           opts.banner = "Usage: [options] VIEW_ID"
           opts.accept(Date)
@@ -60,8 +58,8 @@ module GAAPI
 
           opts.on("-c CREDENTIALS",
             "--credentials CREDENTIALS",
-            "Location of the credentials file. Default: `#{options[:credentials]}`.") do |credentials|
-              options[:credentials] = credentials
+            "Location of the credentials file. Default: `#{credential_file}`.") do |credentials|
+              credential_file = credentials
             end
 
           opts.on("-d", "--debug", "Print debugging information.") do
@@ -99,7 +97,7 @@ module GAAPI
         end
         options[:view_id] = ARGV[0]
 
-        options[:access_token] ||= GAAPI::AccessToken.new(options[:credentials])
+        options[:access_token] ||= GAAPI::AccessToken.new(credential_file)
 
         if options[:end_date].nil? && !options[:start_date].nil?
           options[:end_date] = options[:start_date]

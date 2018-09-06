@@ -8,27 +8,20 @@ module GAAPI
     # Create a Query object.
     # @param access_token [String] A valid access token with which to make a request to
     #   the specified View ID.
-    # @param credentials [String] File name of a credential file provided by
-    #   Google Analytics. To obtain a credential file, follow the instructions
-    #   at https://developers.google.com/identity/protocols/OAuth2ServiceAccount.
-    # @param dry_run [Boolean] If true, do everything except send the query to
-    #   Google Analytics.
     # @param end_date [String] The end date for the report.
-    # @param query_file [IO] The query in JSON format.
+    # @param query_string [String] The query in JSON format.
     # @param start_date [String] The start date for the report.
     # @param view_id [String] The view ID of the property for which to submit the
     #   query.
-    def initialize(query_string, options, access_token: nil)
-      @access_token = access_token || options[:access_token]
-      @dry_run = options[:dry_run]
-
+    def initialize(query_string, view_id, access_token, start_date, end_date)
+      @access_token = access_token
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
       @query = {}
       @query["reportRequests"] = query_string["reportRequests"].map do |report_request|
-        report_request["viewId"] = options[:view_id]
+        report_request["viewId"] = view_id
         report_request["dateRanges"] = [
-          "startDate": options[:start_date],
-          "endDate": options[:end_date]
+          "startDate": start_date,
+          "endDate": end_date
         ]
         report_request
       end
@@ -51,6 +44,6 @@ module GAAPI
 
     private
 
-    attr_reader :access_token, :dry_run, :query
+    attr_reader :access_token, :query
   end
 end
