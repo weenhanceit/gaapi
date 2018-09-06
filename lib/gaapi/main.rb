@@ -30,8 +30,6 @@ module GAAPI
         result = query.execute
 
         if result.code != "200"
-          puts "Request failed #{result.code}"
-          puts result.body
           return 1
         end
 

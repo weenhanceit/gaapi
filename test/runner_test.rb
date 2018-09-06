@@ -65,8 +65,10 @@ class RunnerTest < Test
     ARGV.concat(%w[-a asldkjfalkdfj 888888])
     begin
       $stdin = StringIO.new(QUERY)
-      status = GAAPI::Main.call
-      assert status.zero?
+      assert_output "{\n}\n" do
+        status = GAAPI::Main.call
+        assert status.zero?
+      end
     ensure
       $stdin = STDIN
     end
