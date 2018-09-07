@@ -14,7 +14,7 @@ module GAAPI
     # @param view_id [String] The view ID of the property for which to submit the
     #   query.
     def initialize(query_string, view_id, access_token, start_date, end_date)
-      @access_token = access_token
+      @access_token = access_token.to_s
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
       @query = {}
       @query["reportRequests"] = query_string["reportRequests"].map do |report_request|
@@ -29,7 +29,7 @@ module GAAPI
     end
 
     # Send the requested query to Google Analytics and return the response.
-    # @return [HTTPResponse] The response from the request.
+    # @return [GAAPI::Response] The response from the request.
     def execute
       uri = URI.parse("https://analyticsreporting.googleapis.com/v4/reports:batchGet")
       https = Net::HTTP.new(uri.host, uri.port)

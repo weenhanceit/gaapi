@@ -76,7 +76,7 @@ module GAAPI
           opts.on("-e",
             "--end-date END_DATE",
             Date,
-            "Report including END_DATE.") do |end_date|
+            "Report including END_DATE (yyyy-mm-dd).") do |end_date|
             options[:end_date] = end_date
           end
 
@@ -93,7 +93,7 @@ module GAAPI
           opts.on("-s",
             "--start-date START_DATE",
             Date,
-            "Report including START_DATE.") do |start_date|
+            "Report including START_DATE (yyyy-mm-dd).") do |start_date|
             options[:start_date] = start_date
           end
         end

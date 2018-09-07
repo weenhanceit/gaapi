@@ -7,11 +7,13 @@ module GAAPI
     attr_reader :response
 
     # Raw body of the response. Typically only used for diagnostic purposes.
+    # @return [String] The unformatted body of the response.
     def body
       response.body
     end
 
-    # Raw code of the response. Typically only used for diagnostic purposes.
+    # Raw HTTP status code of the response. Typically only used for diagnostic purposes.
+    # @return [String] The HTTP response code.
     def code
       response.code
     end

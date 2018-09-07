@@ -4,12 +4,15 @@ module GAAPI
   # An access token generated from a credential file provided by Google Analystics.
   # The credential file is suitable for using in applications where humans aren't
   # involved, such as scheduled jobs. To obtain a credential file, follow the instructions
-  #   at https://developers.google.com/identity/protocols/OAuth2ServiceAccount.
+  # at https://developers.google.com/identity/protocols/OAuth2ServiceAccount.
   class AccessToken
     # Get a new access token. The actual token is lazily-generated, so no call is
-    # made to Google Analytics until #token is called.
+    # made to Google Analytics until {#token} is called.
     # @param credential_file [String] File name of a credential file provided by
-    #   Google Analytics.
+    #   Google Analytics. If `credential_file` is missing or `nil`, this method
+    #   looks for credentials in `~/.gaapi/ga-api-key`.
+    # @raise [StandardError] Throws an exception if the credential file is readable
+    #   or writable by other than the current user.
     def initialize(credential_file = nil)
       @credential_file = credential_file || File.expand_path("~/.gaapi/ga-api-key")
       stat = File::Stat.new(@credential_file)
