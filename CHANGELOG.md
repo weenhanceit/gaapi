@@ -1,4 +1,4 @@
-## [Pending Release][0.1.1]
+## [Pending Release][0.3.0]
 
 ### Breaking changes
 
@@ -11,6 +11,18 @@
 ### Bugfixes
 
 * Your contribution here!
+
+## [0.2.1][](2018-09-07)
+
+### Breaking changes
+
+### New features
+
+* Documentation changes.
+
+### Bugfixes
+
+* `gaapi` returns appropriate exit status to operating system.
 
 ## [0.2.0][0.2.0](2018-09-06)
 
