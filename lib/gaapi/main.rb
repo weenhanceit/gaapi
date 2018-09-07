@@ -7,7 +7,7 @@ module GAAPI
     class << self
       def call
         begin
-          return 1 if (options = process_options).nil?
+          return false if (options = process_options).nil?
 
           puts "options: #{options.inspect}" if options[:debug]
 
@@ -20,10 +20,10 @@ module GAAPI
           puts "query: #{query.inspect}" if options[:debug]
         rescue StandardError => e
           $stderr.puts e.message # rubocop:disable Style/StderrPuts
-          return 1
+          return false
         end
 
-        return 0 if options[:dry_run]
+        return true if options[:dry_run]
 
         result = query.execute
         puts "result: #{result.inspect}" if options[:debug]
@@ -32,7 +32,7 @@ module GAAPI
           # Show the output unformatted, because we don't know what we're going
           # to get back.
           puts result.body
-          return 1
+          return false
         end
 
         case options[:output_format]
@@ -42,7 +42,7 @@ module GAAPI
           puts result.pp
         end
 
-        0
+        true
       end
 
       def process_options

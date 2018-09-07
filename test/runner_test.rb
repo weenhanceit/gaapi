@@ -27,7 +27,7 @@ class RunnerTest < Test
   def test_no_view
     assert_output "", /gaapi: You must provide a view ID./ do
       status = GAAPI::Main.call
-      refute status.zero?
+      refute status
     end
   end
 
@@ -37,7 +37,7 @@ class RunnerTest < Test
       begin
         $stdin = StringIO.new("")
         status = GAAPI::Main.call
-        refute status.zero?
+        refute status
       ensure
         $stdin = STDIN
       end
@@ -62,7 +62,7 @@ class RunnerTest < Test
       $stdin = StringIO.new(QUERY)
       assert_output body do
         status = GAAPI::Main.call
-        refute status.zero?
+        refute status
       end
     ensure
       $stdin = STDIN
@@ -78,7 +78,7 @@ class RunnerTest < Test
       $stdin = StringIO.new(QUERY)
       assert_output "{\n}\n" do
         status = GAAPI::Main.call
-        assert status.zero?
+        assert status
       end
     ensure
       $stdin = STDIN
@@ -89,7 +89,7 @@ class RunnerTest < Test
     ARGV.concat(%w[-c daves_not_here_man.json 888888])
     assert_output "", /No such file or directory @ rb_stat_init - daves_not_here_man.json/ do
       status = GAAPI::Main.call
-      refute status.zero?
+      refute status
     end
   end
 end
