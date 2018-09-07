@@ -12,7 +12,7 @@
 
 * Your contribution here!
 
-## [0.1.0][0.1.0](2018-09-06)
+## [0.2.0][0.2.0](2018-09-06)
 
 ### Breaking changes
 
