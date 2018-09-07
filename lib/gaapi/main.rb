@@ -29,7 +29,9 @@ module GAAPI
         puts "result: #{result.inspect}" if options[:debug]
 
         unless result.success?
-          puts result.pp
+          # Show the output unformatted, because we don't know what we're going
+          # to get back.
+          puts result.body
           return 1
         end
 
