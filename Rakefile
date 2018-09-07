@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rake/testtask"
+require "bundler/gem_tasks"
 
 Rake::TestTask.new do |t|
   t.libs << "test"
@@ -10,7 +11,7 @@ Rake::TestTask.new do |t|
 end
 
 # This automatically updates GitHub Releases whenever we `rake release` the gem
-desc "Update Gethub release"
+desc "Update Github release"
 task "release:rubygem_push" do
   require "chandler/tasks"
   Rake.application.invoke_task("chandler:push")
