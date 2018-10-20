@@ -9,7 +9,7 @@ module GAAPI
     # @param access_token [String] A valid access token with which to make a request to
     #   the specified View ID.
     # @param end_date [Date, String] The end date for the report.
-    # @param query_string [String] The query in JSON format.
+    # @param query_string [String, Hash, JSON] The query in JSON format.
     # @param start_date [Date, String] The start date for the report.
     # @param view_id [String] The view ID of the property for which to submit the
     #   query.
@@ -17,7 +17,8 @@ module GAAPI
       @access_token = access_token.to_s
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
       @query = {}
-      @query["reportRequests"] = query_string["reportRequests"].map do |report_request|
+      @query["reportRequests"] = stringify_keys(query_string)["reportRequests"]
+                                 .map do |report_request|
         report_request["viewId"] = view_id
         report_request["dateRanges"] = [
           "startDate": start_date.to_s,
@@ -45,5 +46,20 @@ module GAAPI
     private
 
     attr_reader :access_token, :query
+
+    # The keys have to be strings to get converted to a GA query.
+    # Adapted from Rails.
+    def stringify_keys(object)
+      case object
+      when Hash
+        object.each_with_object({}) do |(key, value), result|
+          result[key.to_s] = stringify_keys(value)
+        end
+      when Array
+        object.map { |e| stringify_keys(e) }
+      else
+        object
+      end
+    end
   end
 end
