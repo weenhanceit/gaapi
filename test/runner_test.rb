@@ -92,8 +92,4 @@ class RunnerTest < Test
       refute status
     end
   end
-
-  def test_return_more_than_10000_rows
-    skip # TODO: Implement
-  end
 end

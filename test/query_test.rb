@@ -92,8 +92,6 @@ class QueryTest < Test
 
   def test_query_with_page_size
     query = JSON.parse(QUERY_STRING)
-    # NOTE: JSON.parse returns a Hash.
-    assert query.is_a?(Hash)
     query["reportRequests"][0]["pageSize"] = 9_999
 
     stub_request(:post, EXPECTED_REQUEST)
@@ -104,9 +102,5 @@ class QueryTest < Test
 
     GAAPI::Query.new(query, "000000", "test_token", "2017-10-01", "2017-10-31").execute
     assert_requested(:post, EXPECTED_REQUEST, body: query)
-  end
-
-  def test_exception_for_more_than_10000_rows
-    skip # TODO: Implement
   end
 end

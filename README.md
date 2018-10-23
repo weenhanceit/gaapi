@@ -209,7 +209,7 @@ A query to find basic visit data for a web site is:
 
 By default, Google Analytics will return a maximum of 1,000 rows. `gaapi` automatically adds a `pageSize: 10000` to your query, if no `pageSize` is specified. This causes Google Analytics to return 10,000 rows, the maximum that Google Analytics will return.
 
-`gaapi` will throw an exception if the query returns more than 10,000 rows.
+If `gaapi` returns 10,000 rows, it's your responsibility to use the `nextPageToken` in the returned result, to query additional rows.
 
 ## Authentication
 [The introduction to authentication for Google products is here: https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.]
