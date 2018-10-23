@@ -9,9 +9,16 @@
 Google provides a [Ruby client library](https://developers.google.com/api-client-library/ruby/apis/analyticsreporting/v4) that builds queries by constructing them from Ruby objects. `gaapi` allows you to express queries as JSON. If you prefer the JSON format, you may prefer to use `gaapi`. If you want to deal with Ruby objects (which are likely more verbose than JSON), use the Google gem.
 
 ## Installation
+For stand-alone use:
 
 ```bash
 gem install gaapi --no-doc
+```
+
+In a Gemfile:
+
+```
+gem 'gaapi'
 ```
 
 ## Usage
@@ -199,6 +206,10 @@ A query to find basic visit data for a web site is:
   ]
 }
 ```
+
+By default, Google Analytics will return a maximum of 1,000 rows. `gaapi` automatically adds a `pageSize: 10000` to your query, if no `pageSize` is specified. This causes Google Analytics to return 10,000 rows, the maximum that Google Analytics will return.
+
+`gaapi` will throw an exception if the query returns more than 10,000 rows.
 
 ## Authentication
 [The introduction to authentication for Google products is here: https://developers.google.com/analytics/devguides/reporting/core/v4/authorization.]

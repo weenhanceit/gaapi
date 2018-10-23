@@ -16,14 +16,14 @@ module GAAPI
     def initialize(query_string, view_id, access_token, start_date, end_date)
       @access_token = access_token.to_s
       query_string = JSON.parse(query_string) unless query_string.is_a?(Hash)
-      @query = {}
-      @query["reportRequests"] = stringify_keys(query_string)["reportRequests"]
-                                 .map do |report_request|
+      @query = stringify_keys(query_string)
+      @query["reportRequests"] = @query["reportRequests"].map do |report_request|
         report_request["viewId"] = view_id
         report_request["dateRanges"] = [
           "startDate": start_date.to_s,
           "endDate": end_date.to_s
         ]
+        report_request["pageSize"] ||= 10_000
         report_request
       end
       # puts "query: #{JSON.pretty_generate(query)}"

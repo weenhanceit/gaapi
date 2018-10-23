@@ -54,7 +54,7 @@ class RunnerTest < Test
         }
       }
     BODY
-    stub_request(:any, "https://analyticsreporting.googleapis.com/v4/reports:batchGet")
+    stub_request(:post, "https://analyticsreporting.googleapis.com/v4/reports:batchGet")
       .with(body: /endDate/, headers: { "Authorization" => "Bearer not_the_right_token" })
       .to_return(body: body, status: 401)
     ARGV.concat(%w[-a not_the_right_token 888888])
@@ -70,7 +70,7 @@ class RunnerTest < Test
   end
 
   def test_simple_command_line
-    stub_request(:any, "https://analyticsreporting.googleapis.com/v4/reports:batchGet")
+    stub_request(:post, "https://analyticsreporting.googleapis.com/v4/reports:batchGet")
       .with(body: /endDate/, headers: { "Authorization" => "Bearer asldkjfalkdfj" })
       .to_return(body: "{}", status: 200)
     ARGV.concat(%w[-a asldkjfalkdfj 888888])
@@ -91,5 +91,9 @@ class RunnerTest < Test
       status = GAAPI::Main.call
       refute status
     end
+  end
+
+  def test_return_more_than_10000_rows
+    skip # TODO: Implement
   end
 end
