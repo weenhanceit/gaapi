@@ -8,7 +8,6 @@ require "gaapi/version"
 Gem::Specification.new do |s|
   s.name        = "gaapi"
   s.version     = GAAPI::VERSION
-  s.date        = "2018-09-06"
   s.summary     = "Query Google Analytics from the command line."
   s.description = <<-DESCRIPTION
     Submit queries expressed in JSON to Google Analytics. Can be run
