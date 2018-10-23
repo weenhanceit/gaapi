@@ -1,4 +1,4 @@
-## [Pending Release][0.3.0]
+## [Pending Release][0.4.0]
 
 ### Breaking changes
 
@@ -11,6 +11,13 @@
 ### Bugfixes
 
 * Your contribution here!
+
+## [0.3.0][](2018-10-23)
+
+### New features
+
+* [#4] The query can now be specified as a string, a JSON hash, or a regular Ruby hash with symbolic keys.
+* [#3] `gaapi` automatically retrieves the Google Analytics-defined maximum of 10,000 rows, unless the user specifies a lower limit.
 
 ## [0.2.1][](2018-09-07)
 
