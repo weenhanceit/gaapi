@@ -21,19 +21,10 @@ Gem::Specification.new do |s|
   s.authors     = ["Larry Reid", "Phil Carrillo"]
   s.email       = "larry.reid@weenhanceit.com"
   s.executables << "gaapi"
-  s.files = [
-    "bin/gaapi",
-    "lib/gaapi.rb",
-    "lib/gaapi/access_token.rb",
-    "lib/gaapi/main.rb",
-    "lib/gaapi/query.rb",
-    "lib/gaapi/response.rb",
-    "lib/gaapi/version.rb"
-  ]
-  s.homepage =
-    "https://github.com/weenhanceit/gaapi"
-  s.license = "MIT"
-  s.metadata = {
+  s.files       = Dir.glob("{bin,lib}/**/*") + %w(CHANGELOG.md LICENSE README.md)
+  s.homepage    = "https://github.com/weenhanceit/gaapi"
+  s.license     = "MIT"
+  s.metadata    = {
     # "bug_tracker_uri"   => "https://example.com/user/bestgemever/issues",
     # "changelog_uri"     => "https://example.com/user/bestgemever/CHANGELOG.md",
     # "documentation_uri" => "https://www.example.info/gems/bestgemever/0.0.1",
