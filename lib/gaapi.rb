@@ -7,4 +7,4 @@ require "googleauth"
 # require "gaapi/main.rb"
 # require "gaapi/query.rb"
 # require "gaapi/response.rb"
-Dir.glob("lib/gaapi/**/*.rb").each { |f| require Pathname.new(f).relative_path_from(Pathname.new("lib")) }
+Dir.glob("lib/gaapi/**/*.rb").each { |f| require f.gsub(%r{lib/}, "") }
