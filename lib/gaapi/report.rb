@@ -26,13 +26,18 @@ module GAAPI
     attr_reader :report
 
     # An array of the metric names, in the order that they appear in the response.
+    def metric_type(i)
+      report["columnHeader"]["metricHeader"]["metricHeaderEntries"][i]["type"]
+    end
+
+    # An array of the metric names, in the order that they appear in the response.
     def metrics
       report["columnHeader"]["metricHeader"]["metricHeaderEntries"].map { |metric| metric["name"] }
     end
 
     # The data rows in the report.
     def rows
-      report["data"]["rows"].map { |row| Row.new(response, row) }
+      report["data"]["rows"].map { |row| Row.new(self, row) }
     end
 
     # The totals, if there were any.

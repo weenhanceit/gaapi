@@ -64,12 +64,20 @@ class ResponseTest < Test
     REQUEST_FOR_TOTALS["reportRequests"][0]["pageSize"] = 10_000
     assert_requested(:post, GA_REQUEST_URI, body: REQUEST_FOR_TOTALS)
     assert_equal RESPONSE_WITH_TOTALS.to_json, result.body
-    assert_equal RESPONSE_WITH_TOTALS["reports"][0], result.reports[0].report
+    report = result.reports[0]
+    assert_equal RESPONSE_WITH_TOTALS["reports"][0], report.report
     assert_equal %w[ga:nthWeek ga:medium ga:source] + %w[ga:sessions ga:sessionDuration ga:users],
-      result.reports[0].headers
-    assert_equal %w[0001 (none) (direct)] + %w[408 2 369], result.reports[0].rows[0].to_a
-    assert_equal %w[0001 cpc google] + %w[515 1 464], result.reports[0].rows[1].to_a
-    assert_equal [nil, nil, nil] + %w[923 3 833], result.reports[0].totals
+      report.headers
+    assert_equal %w[0001 (none) (direct)] + %w[408 2 369], report.rows[0].to_a
+    assert_equal %w[0001 cpc google] + %w[515 1 464], report.rows[1].to_a
+    assert_equal [nil, nil, nil] + %w[923 3 833], report.totals
+    assert_equal "0001", report.rows[0].nth_week
+    assert_equal "0001", report.rows[1].nth_week
+    assert_equal "(none)", report.rows[0].medium
+    assert_equal "(direct)", report.rows[0].source
+    assert_equal 408, report.rows[0].sessions
+    assert_equal 2, report.rows[0].session_duration
+    assert_equal 369, report.rows[0].users
   end
 
   def test_csv_with_totals
