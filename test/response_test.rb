@@ -63,6 +63,8 @@ class ResponseTest < Test
     assert_requested(:post, GA_REQUEST_URI, body: request)
     assert_equal response.to_json, result.body
     assert_equal response["reports"][0], result.reports[0].report
+    assert_equal %w[ga:nthWeek ga:medium ga:source] + %w[ga:sessions ga:sessionDuration ga:users],
+      result.reports[0].headers
   end
 end
 # {

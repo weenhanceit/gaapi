@@ -27,7 +27,7 @@ module GAAPI
         reports.each(&:report).each do |report|
           # puts report.column_header.dimensions.inspect
           # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
-          csv << csv_header_row(report)
+          csv << report.headers
           report["data"]["rows"].each do |row|
             csv << csv_data_row(row["dimensions"], row["metrics"])
           end
@@ -76,25 +76,10 @@ module GAAPI
       response.body
     end
 
-    # A single report from a query to Google Analytics
-    class Report
-      def initialize(response, report)
-        @response = response
-        @report = report
-      end
-      attr_reader :report
-    end
-
     private
 
     def csv_data_row(row_headers, metrics)
       (Array(row_headers) || []) + metrics[0]["values"]
-    end
-
-    def csv_header_row(report)
-      (report["columnHeader"]["dimensions"] || []) + report["columnHeader"]["metricHeader"]["metricHeaderEntries"].map do |entry|
-        entry["name"]
-      end
     end
   end
 end
