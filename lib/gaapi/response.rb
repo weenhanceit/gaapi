@@ -23,9 +23,8 @@ module GAAPI
     # @return [String] The result of the query formatted as a comma-separated
     #   values string.
     def csv
-      result = to_json
       @csv ||= CSV.generate do |csv|
-        result["reports"].each do |report|
+        reports.each(&:report).each do |report|
           # puts report.column_header.dimensions.inspect
           # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
           csv << csv_header_row(report)
@@ -47,6 +46,18 @@ module GAAPI
       @pp ||= JSON.pretty_generate(to_json)
     end
 
+    # The array of reports returned by the query.
+    # @return [Array] An array of reports.
+    def reports
+      @reports ||= if success?
+                     to_json["reports"].map do |report|
+                       Report.new(self, report)
+                     end
+                   else
+                     []
+                   end
+    end
+
     # Return true if the request was successful.
     # @return [Boolean] True if the request was successful (response code 200).
     def success?
@@ -63,6 +74,15 @@ module GAAPI
     # @return [String] JSON-formatted response in a String.
     def to_s
       response.body
+    end
+
+    # A single report from a query to Google Analytics
+    class Report
+      def initialize(response, report)
+        @response = response
+        @report = report
+      end
+      attr_reader :report
     end
 
     private

@@ -23,13 +23,11 @@ class QueryTest < Test
   QUERY
                           .gsub(/\s+/, "")
 
-  EXPECTED_REQUEST = "https://analyticsreporting.googleapis.com/v4/reports:batchGet"
-
   # Need this because gaapi doesn't put whitespace in query.
   QUERY_STRING = EXPECTED_REQUEST_BODY.gsub(/("pageSize":\s*100000)/, "")
 
   def setup
-    stub_request(:post, EXPECTED_REQUEST)
+    stub_request(:post, GA_REQUEST_URI)
       .with(body: EXPECTED_REQUEST_BODY, headers: {
               "Authorization": "Bearer test_token"
             })
@@ -39,7 +37,7 @@ class QueryTest < Test
   def test_query_as_a_string
     # stub_token_request
     GAAPI::Query.new(QUERY_STRING, "000000", "test_token", "2017-10-01", "2017-10-31").execute
-    assert_requested(:post, EXPECTED_REQUEST, body: EXPECTED_REQUEST_BODY)
+    assert_requested(:post, GA_REQUEST_URI, body: EXPECTED_REQUEST_BODY)
   end
 
   def test_query_as_a_hash_string_keys
@@ -59,7 +57,7 @@ class QueryTest < Test
         }]
       }
     GAAPI::Query.new(query, "000000", "test_token", "2017-10-01", "2017-10-31").execute
-    assert_requested(:post, EXPECTED_REQUEST, body: EXPECTED_REQUEST_BODY)
+    assert_requested(:post, GA_REQUEST_URI, body: EXPECTED_REQUEST_BODY)
   end
 
   def test_query_as_a_hash_symbol_keys
@@ -79,7 +77,7 @@ class QueryTest < Test
         }]
       }
     GAAPI::Query.new(query, "000000", "test_token", "2017-10-01", "2017-10-31").execute
-    assert_requested(:post, EXPECTED_REQUEST, body: EXPECTED_REQUEST_BODY)
+    assert_requested(:post, GA_REQUEST_URI, body: EXPECTED_REQUEST_BODY)
   end
 
   def test_query_as_a_json
@@ -87,20 +85,20 @@ class QueryTest < Test
     # NOTE: JSON.parse returns a Hash.
     assert query.is_a?(Hash)
     GAAPI::Query.new(query, "000000", "test_token", "2017-10-01", "2017-10-31").execute
-    assert_requested(:post, EXPECTED_REQUEST, body: EXPECTED_REQUEST_BODY)
+    assert_requested(:post, GA_REQUEST_URI, body: EXPECTED_REQUEST_BODY)
   end
 
   def test_query_with_page_size
     query = JSON.parse(QUERY_STRING)
     query["reportRequests"][0]["pageSize"] = 9_999
 
-    stub_request(:post, EXPECTED_REQUEST)
+    stub_request(:post, GA_REQUEST_URI)
       .with(body: query, headers: {
               "Authorization": "Bearer test_token"
             })
       .to_return(status: 200)
 
     GAAPI::Query.new(query, "000000", "test_token", "2017-10-01", "2017-10-31").execute
-    assert_requested(:post, EXPECTED_REQUEST, body: query)
+    assert_requested(:post, GA_REQUEST_URI, body: query)
   end
 end

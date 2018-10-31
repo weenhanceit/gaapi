@@ -5,6 +5,8 @@ require "webmock/minitest"
 require "gaapi"
 
 class Test < MiniTest::Test
+  GA_REQUEST_URI = "https://analyticsreporting.googleapis.com/v4/reports:batchGet"
+
   # Make up a credential. Somewhere in the gems you have to have a legit private key in that field.
   # The key below is too short for real world use. Use 2048 if not for testing.
   CREDENTIAL = <<~CREDENTIAL
