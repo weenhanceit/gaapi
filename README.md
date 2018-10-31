@@ -99,11 +99,44 @@ if result.success?
 end
 ```
 
-Finally, use the raw response body, or format it into more readable JSON, or to a comma-separated values format. For example:
+If the query was successful, you have access to a few interesting methods:
 ```ruby
-puts result.body
-puts result.pp
-puts result.csv
+puts result.body  # raw response body
+puts result.pp    # a string formatted into more readable JSON
+puts result.csv   # comma-separated values format, ready to be written to a file
+```
+
+There is also some support now for a more structured use of the resulting query. If the query was successful (`result.success?`), you can use the following:
+```
+result.reports    # An array of GAAPI::Report objects
+report.dimensions # An array of the dimension names
+report.headers    # An array of the dimension names and metric names
+report.metrics    # An array of the metric names
+report.rows       # An array of GAAPI::Row objects
+```
+
+If you have a `Row` object, you can access the dimensions and metrics using method names. For example, to get the `ga:sessionDuration` metric for a row:
+```
+row.session_duration
+```
+
+The `ga:` is stripped from the front of the dimension or metric name, and then the rest is converted to snake case.
+
+You can also get all the dimensions or all the metrics for a row:
+```
+row.dimensions
+row.metrics
+```
+
+These return arrays with the values in the order corresponding to the `report.dimensions` and `report.metrics` arrays.
+
+Putting it all together, to get all the `ga:avgSessionDuration` from all the rows in all the reports:
+```
+result.reports.flat_map do |report|
+  report.rows.map do |row|
+    row.avg_session_duration
+  end
+end
 ```
 
 ## Queries
