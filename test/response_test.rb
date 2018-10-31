@@ -27,6 +27,7 @@ class ResponseTest < Test
               "metrics" => [{ "values" => %w[515 1 464] }]
             }
           ],
+          "totals" => [{ "values" => %w[923 3 833] }],
           "rowCount" => 2,
           "isDataGolden" => false
         }
@@ -65,6 +66,7 @@ class ResponseTest < Test
     assert_equal response["reports"][0], result.reports[0].report
     assert_equal %w[ga:nthWeek ga:medium ga:source] + %w[ga:sessions ga:sessionDuration ga:users],
       result.reports[0].headers
+    assert_equal %w[0001 (none) (direct)] + %w[408 2 369], result.reports[0].rows[0].to_a
   end
 end
 # {

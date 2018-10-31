@@ -28,9 +28,7 @@ module GAAPI
           # puts report.column_header.dimensions.inspect
           # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
           csv << report.headers
-          report["data"]["rows"].each do |row|
-            csv << csv_data_row(row["dimensions"], row["metrics"])
-          end
+          report.rows.each { |row| csv << row.to_a }
           csv << csv_data_row("Totals", report["data"]["totals"]) if report["data"]["totals"]
         end
       end
