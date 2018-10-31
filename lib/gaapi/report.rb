@@ -5,7 +5,7 @@ module GAAPI
   class Report
     # An array of the dimensions, in the order that they appear in the response.
     def dimensions
-      report["columnHeader"]["dimensions"]
+      report["columnHeader"]["dimensions"] || []
     end
 
     # An array of the dimensions first and then the metrics, in the order that
@@ -28,6 +28,16 @@ module GAAPI
     # The data rows in the report.
     def rows
       report["data"]["rows"].map { |row| Row.new(response, row) }
+    end
+
+    # The totals, if there were any.
+    def totals
+      ["Totals"] + Array.new([dimensions.size - 1, 0].max) + report["data"]["totals"][0]["values"]
+    end
+
+    # @return [Boolean] True if there totals were returned from the query.
+    def totals?
+      report["data"]["totals"]
     end
 
     private

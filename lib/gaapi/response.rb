@@ -29,7 +29,7 @@ module GAAPI
           # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
           csv << report.headers
           report.rows.each { |row| csv << row.to_a }
-          csv << csv_data_row("Totals", report["data"]["totals"]) if report["data"]["totals"]
+          csv << report.totals if report.totals?
         end
       end
     end
