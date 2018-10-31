@@ -69,7 +69,7 @@ class ResponseTest < Test
       result.reports[0].headers
     assert_equal %w[0001 (none) (direct)] + %w[408 2 369], result.reports[0].rows[0].to_a
     assert_equal %w[0001 cpc google] + %w[515 1 464], result.reports[0].rows[1].to_a
-    assert_equal ["Totals", nil, nil] + %w[923 3 833], result.reports[0].totals
+    assert_equal [nil, nil, nil] + %w[923 3 833], result.reports[0].totals
   end
 
   def test_csv_with_totals
@@ -86,6 +86,66 @@ class ResponseTest < Test
             })
       .to_return(body: RESPONSE_WITH_TOTALS.to_json, status: 200)
     result = GAAPI::Query.new(REQUEST_FOR_TOTALS, "000000", "test_token", "2017-10-01", "2017-10-31").execute
+    assert_equal expected_csv, result.csv
+  end
+
+  def test_csv_with_totals_no_dimensions
+    request = <<~REQUEST
+      {
+        "reportRequests":
+        [
+          {
+            "viewId": "XXXX",
+            "dateRanges": [{"startDate": "2014-11-01", "endDate": "2014-11-30"}],
+            "metrics": [{"expression": "ga:users"}]
+          }
+        ]
+      }
+    REQUEST
+
+    response = <<~RESPONSE
+      {
+        "reports": [{
+          "columnHeader": {
+            "metricHeader": {
+              "metricHeaderEntries": [{
+                "name": "ga:users",
+                "type": "INTEGER"
+              }]
+            }
+          },
+          "data": {
+            "rows": [{
+              "metrics": [{
+                "values": [
+                  "44"
+                ]
+              }]
+            }],
+            "totals": [{
+              "values": [
+                "44"
+              ]
+            }],
+            "rowCount": 1,
+            "isDataGolden": true
+          }
+        }]
+      }
+    RESPONSE
+
+    expected_csv = <<~CSV
+      ,ga:users
+      ,44
+      Totals,44
+    CSV
+
+    stub_request(:post, GA_REQUEST_URI)
+      .with(headers: {
+              "Authorization": "Bearer test_token"
+            })
+      .to_return(body: response, status: 200)
+    result = GAAPI::Query.new(request, "000000", "test_token", "2017-10-01", "2017-10-31").execute
     assert_equal expected_csv, result.csv
   end
 end

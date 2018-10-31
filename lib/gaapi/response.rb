@@ -25,11 +25,18 @@ module GAAPI
     def csv
       @csv ||= CSV.generate do |csv|
         reports.each(&:report).each do |report|
-          # puts report.column_header.dimensions.inspect
-          # puts report.column_header.metric_header.metric_header_entries.map(&:name).inspect
-          csv << report.headers
-          report.rows.each { |row| csv << row.to_a }
-          csv << report.totals if report.totals?
+          # If there are no dimensions, but totals, we need to put an extra
+          # column at the start for the word "Total".
+          # I don't see how totals will be different than the metrics if you
+          # don't specify dimensions, but whatever.
+          totals_column = report.totals? && !report.dimensions? ? [nil] : []
+          csv << totals_column + report.headers
+          report.rows.each { |row| csv << totals_column + row.to_a }
+          csv << ["Totals"] + if report.totals? && !report.dimensions?
+                                report.totals
+                              else
+                                report.totals[1..-1]
+                              end
         end
       end
     end
@@ -72,12 +79,6 @@ module GAAPI
     # @return [String] JSON-formatted response in a String.
     def to_s
       response.body
-    end
-
-    private
-
-    def csv_data_row(row_headers, metrics)
-      (Array(row_headers) || []) + metrics[0]["values"]
     end
   end
 end

@@ -8,10 +8,15 @@ module GAAPI
       report["columnHeader"]["dimensions"] || []
     end
 
+    # @return [Boolean] True if dimensions were returned.
+    def dimensions?
+      !report["columnHeader"]["dimensions"].nil?
+    end
+
     # An array of the dimensions first and then the metrics, in the order that
     # they appear in the response.
     def headers
-      (dimensions || []) + metrics
+      dimensions + metrics
     end
 
     def initialize(response, report)
@@ -32,7 +37,7 @@ module GAAPI
 
     # The totals, if there were any.
     def totals
-      ["Totals"] + Array.new([dimensions.size - 1, 0].max) + report["data"]["totals"][0]["values"]
+      Array.new(dimensions.size) + report["data"]["totals"][0]["values"]
     end
 
     # @return [Boolean] True if there totals were returned from the query.

@@ -6,7 +6,7 @@ module GAAPI
     # An array of the dimension values, in the order that they appear in the
     # dimension headers.
     def dimensions
-      row["dimensions"]
+      row["dimensions"] || []
     end
 
     def initialize(response, row)
@@ -17,7 +17,9 @@ module GAAPI
     # An array of the metric values, in the order that they appear in the
     # metric headers.
     def metrics
-      # FIXME: Why is there a 0 here?
+      # NOTE: There is one entry in the `row["metrics"]` array for each data range.
+      # Since currently we only support one date range, this following index is
+      # always 0.
       row["metrics"][0]["values"]
     end
 
@@ -25,7 +27,7 @@ module GAAPI
     #   Headers first, in the order that they appear in the Report#headers array.
     #   Metrics next, in the order that they appear in the Rport#metrics array.
     def to_a
-      (dimensions || []) + metrics
+      dimensions + metrics
     end
 
     private
