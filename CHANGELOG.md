@@ -12,6 +12,12 @@
 
 * Your contribution here!
 
+## [0.4.1][](2018-10-31)
+
+### Bugfixes
+
+* Fix the faulty attempt to automate requires.
+
 ## [0.4.0][](2018-10-31)
 
 ### Breaking changes
@@ -66,5 +72,6 @@
 
 * N/A.
 
-[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...v0.3.0
+[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/weenhanceit/gaapi/compare/v0.3.0...v0.4.0
