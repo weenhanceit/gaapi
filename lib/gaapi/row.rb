@@ -70,11 +70,15 @@ module GAAPI
         # TODO: Do this better.
         metrics[i].to_f
       when "TIME"
+        # Google documentation claims to following:
         # TIME  Time metric in HH:MM:SS format.
-        # Time in fraction of a day.
-        (metrics[i][0..1].to_i +
-          metrics[i][3..4].to_i * 60 +
-          metrics[i][6..7].to_i * 24 * 60) / 86_400
+        # It also says it's seconds, and that's what I see in real results.
+        # So comment out the following:
+        # (metrics[i][0..1].to_i +
+        #   metrics[i][3..4].to_i * 60 +
+        #   metrics[i][6..7].to_i * 24 * 60)
+        # Simply make it a float.
+        metrics[i].to_f
       else
         # METRIC_TYPE_UNSPECIFIED  Metric type is unspecified.
         metric[i]
