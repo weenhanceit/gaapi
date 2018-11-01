@@ -1,4 +1,4 @@
-## [Pending Release][0.4.0]
+## [Pending Release][0.5.0]
 
 ### Breaking changes
 
@@ -11,6 +11,17 @@
 ### Bugfixes
 
 * Your contribution here!
+
+## [0.4.0][](2018-10-31)
+
+### Breaking changes
+
+* The CSV output from the command-line tool may have changed in certain edge cases, like when no dimensions are specified in the query.
+
+### New features
+
+* Report and Row classes for the result make writing Ruby code a little easier.
+* [#5] Dimensions and metrics in rows can be accessed by name. See the README.
 
 ## [0.3.0][](2018-10-23)
 
@@ -54,3 +65,6 @@
 ### Bugfixes
 
 * N/A.
+
+[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...v0.3.0
