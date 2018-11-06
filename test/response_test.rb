@@ -97,6 +97,112 @@ class ResponseTest < Test
     assert_equal expected_csv, result.csv
   end
 
+  def test_all_metric_types
+    request = <<~REQUEST
+      {
+        "reportRequests":
+        [
+          {
+            "viewId": "XXXX",
+            "dateRanges": [{"startDate": "2014-11-01", "endDate": "2014-11-30"}],
+            "metrics": [{"expression": "ga:users"},
+              {"expression": "ga:sessionDuration"},
+              {"expression": "ga:bounceRate"},
+              {"expression": "ga:goalValueAll"},
+              {"expression": "ga:pageViewsPerSession"}
+            ]
+          }
+        ]
+      }
+    REQUEST
+
+    response = <<~RESPONSE
+    {
+      "reports": [{
+        "columnHeader": {
+          "metricHeader": {
+            "metricHeaderEntries": [{
+                "name": "ga:users",
+                "type": "INTEGER"
+              },
+              {
+                "name": "ga:sessionDuration",
+                "type": "TIME"
+              },
+              {
+                "name": "ga:bounceRate",
+                "type": "PERCENT"
+              },
+              {
+                "name": "ga:goalValueAll",
+                "type": "CURRENCY"
+              },
+              {
+                "name": "ga:pageViewsPerSession",
+                "type": "FLOAT"
+              }
+            ]
+          }
+        },
+        "data": {
+          "rows": [{
+            "metrics": [{
+              "values": [
+                "44",
+                "35740.0",
+                "43.63636363636363",
+                "0.0",
+                "5.454545454545454"
+              ]
+            }]
+          }],
+          "totals": [{
+            "values": [
+              "44",
+              "35740.0",
+              "43.63636363636363",
+              "0.0",
+              "5.454545454545454"
+            ]
+          }],
+          "rowCount": 1,
+          "minimums": [{
+            "values": [
+              "44",
+              "35740.0",
+              "43.63636363636363",
+              "0.0",
+              "5.454545454545454"
+            ]
+          }],
+          "maximums": [{
+            "values": [
+              "44",
+              "35740.0",
+              "43.63636363636363",
+              "0.0",
+              "5.454545454545454"
+            ]
+          }],
+          "isDataGolden": true
+        }
+      }]
+    }
+    RESPONSE
+
+    stub_request(:post, GA_REQUEST_URI)
+      .with(headers: {
+              "Authorization": "Bearer test_token"
+            })
+      .to_return(body: response, status: 200)
+    result = GAAPI::Query.new(request, "000000", "test_token", "2017-10-01", "2017-10-31").execute
+    assert_equal 44, result.reports.first.rows.first.users
+    assert_equal 35_740.0, result.reports.first.rows.first.session_duration
+    assert_equal 43.63636363636363, result.reports.first.rows.first.bounce_rate
+    assert_equal 0.0, result.reports.first.rows.first.goal_value_all
+    assert_equal 5.454545454545454, result.reports.first.rows.first.page_views_per_session
+  end
+
   def test_csv_with_totals_no_dimensions
     request = <<~REQUEST
       {
