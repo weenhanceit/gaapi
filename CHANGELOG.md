@@ -12,6 +12,12 @@
 
 * Your contribution here!
 
+## [0.4.2][](2018-11-06)
+
+### Bugfixes
+
+* [#6] Correct the conversion of TIME metrics.
+
 ## [0.4.1][](2018-10-31)
 
 ### Bugfixes
