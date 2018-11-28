@@ -12,6 +12,12 @@
 
 * Your contribution here!
 
+## [0.4.3][](2018-11-28)
+
+### Bugfixes
+
+* [#7] Fix CSV output when no totals requested in GA query.
+
 ## [0.4.2][](2018-11-06)
 
 ### Bugfixes
@@ -78,6 +84,8 @@
 
 * N/A.
 
-[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.1...HEAD
+[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.3...HEAD
+[0.4.3]: https://github.com/weenhanceit/gaapi/compare/v0.4.2...v0.4.3
+[0.4.2]: https://github.com/weenhanceit/gaapi/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/weenhanceit/gaapi/compare/v0.3.0...v0.4.0
