@@ -32,7 +32,8 @@ module GAAPI
           totals_column = report.totals? && !report.dimensions? ? [nil] : []
           csv << totals_column + report.headers
           report.rows.each { |row| csv << totals_column + row.to_a }
-          csv << ["Totals"] + if report.totals? && !report.dimensions?
+          next unless report.totals? # Rubocop did this. Not sure I like it.
+          csv << ["Totals"] + if !report.dimensions?
                                 report.totals
                               else
                                 report.totals[1..-1]

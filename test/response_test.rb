@@ -33,6 +33,35 @@ class ResponseTest < Test
     }]
   }.freeze
 
+  RESPONSE_WITHOUT_TOTALS = {
+    "reports" => [{
+      "columnHeader" => {
+        "dimensions" => %w[ga:nthWeek ga:medium ga:source],
+        "metricHeader" => {
+          "metricHeaderEntries" => [
+            { "name" => "ga:sessions", "type" => "INTEGER" },
+            { "name" => "ga:sessionDuration", "type" => "INTEGER" },
+            { "name" => "ga:users", "type" => "INTEGER" }
+          ]
+        }
+      },
+      "data" => {
+        "rows" => [
+          {
+            "dimensions" => %w[0001 (none) (direct)],
+            "metrics" => [{ "values" => %w[408 2 369] }]
+          },
+          {
+            "dimensions" => %w[0001 cpc google],
+            "metrics" => [{ "values" => %w[515 1 464] }]
+          }
+        ],
+        "rowCount" => 2,
+        "isDataGolden" => false
+      }
+    }]
+  }.freeze
+
   REQUEST_FOR_TOTALS = {
     "reportRequests" => [{
       "viewId" => "000000",
@@ -93,6 +122,22 @@ class ResponseTest < Test
               "Authorization": "Bearer test_token"
             })
       .to_return(body: RESPONSE_WITH_TOTALS.to_json, status: 200)
+    result = GAAPI::Query.new(REQUEST_FOR_TOTALS, "000000", "test_token", "2017-10-01", "2017-10-31").execute
+    assert_equal expected_csv, result.csv
+  end
+
+  def test_csv_without_totals
+    expected_csv = <<~CSV
+      ga:nthWeek,ga:medium,ga:source,ga:sessions,ga:sessionDuration,ga:users
+      0001,(none),(direct),408,2,369
+      0001,cpc,google,515,1,464
+    CSV
+
+    stub_request(:post, GA_REQUEST_URI)
+      .with(headers: {
+              "Authorization": "Bearer test_token"
+            })
+      .to_return(body: RESPONSE_WITHOUT_TOTALS.to_json, status: 200)
     result = GAAPI::Query.new(REQUEST_FOR_TOTALS, "000000", "test_token", "2017-10-01", "2017-10-31").execute
     assert_equal expected_csv, result.csv
   end
