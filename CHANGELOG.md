@@ -1,4 +1,4 @@
-## [Pending Release][0.5.0]
+## [Pending Release][0.6.0]
 
 ### Breaking changes
 
@@ -11,6 +11,17 @@
 ### Bugfixes
 
 * Your contribution here!
+
+## [0.5.0][](2018-12-07)
+
+### Breaking changes
+
+* Removed an unused parameter from Report.new.
+
+### New features
+
+* Added `is_data_golden` and `next_page_token` methods to `Row` and `Report`.
+* Improved the Yard documentation.
 
 ## [0.4.3][](2018-11-28)
 
@@ -85,6 +96,7 @@
 * N/A.
 
 [Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.3...HEAD
+[0.5.0]: https://github.com/weenhanceit/gaapi/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/weenhanceit/gaapi/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/weenhanceit/gaapi/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/weenhanceit/gaapi/compare/v0.4.0...v0.4.1
