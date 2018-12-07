@@ -24,6 +24,13 @@ module GAAPI
       @row = row
     end
 
+    # Return if the data is golden, meaning it won't change if the query is re-run
+    # at a later time. The is a lag between the end of a date period and when
+    # Google Analytics has completely consolidated all the tracking data.
+    def is_data_golden
+      report.is_data_golden
+    end
+
     # Define and call methods to return the value of the dimensions and metrics
     # in the report.
     # @!macro method_missing
@@ -51,6 +58,14 @@ module GAAPI
       # Since currently we only support one date range, this following index is
       # always 0.
       row["metrics"][0]["values"]
+    end
+
+    # Return the nextPageToken, if any, indicating that the query exceeded
+    # the maximum number of rows allowed in a single response, and that the client
+    # has to ask for the rest of the data.
+    def next_page_token
+      # puts "Next Page Token report: #{report.report}"
+      report.next_page_token
     end
 
     def respond_to_missing?

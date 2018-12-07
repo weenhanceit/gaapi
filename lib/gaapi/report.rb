@@ -35,6 +35,13 @@ module GAAPI
     # instance of the a Row.
     attr_reader :report
 
+    # Return if the data is golden, meaning it won't change if the query is re-run
+    # at a later time. The is a lag between the end of a date period and when
+    # Google Analytics has completely consolidated all the tracking data.
+    def is_data_golden
+      report["data"]["isDataGolden"]
+    end
+
     # The metric type of the i'th metric in the report.
     def metric_type(i)
       report["columnHeader"]["metricHeader"]["metricHeaderEntries"][i]["type"]
@@ -43,6 +50,13 @@ module GAAPI
     # An array of the metric names, in the order that they appear in the report.
     def metrics
       report["columnHeader"]["metricHeader"]["metricHeaderEntries"].map { |metric| metric["name"] }
+    end
+
+    # Return the nextPageToken, if any, indicating that the query exceeded
+    # the maximum number of rows allowed in a single response, and that the client
+    # has to ask for the rest of the data.
+    def next_page_token
+      report["nextPageToken"]
     end
 
     # The data rows in the report.
