@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 module GAAPI
-  # A single row from a query to Google Analytics
+  # A single row from a report from a query to Google Analytics.
+  #
+  # In addition to the methods listed, `Row` provides methods to access the
+  # value of a dimension or metric by the name of the dimension or metric.
+  # @!macro [new] method_missing
+  #   The name is the snake case version of the Google Analytics dimension or
+  #   metric name, minus the `ga:` prefix. For example, you can access the metric
+  #   `ga:sessionDuration` by writing `row.session_duration`.
+  #
+  #   In the case of the metrics, the value returned is the appropriate Ruby type
+  #   for the metric. For example, an INTEGER metric is returned as a Ruby integer.
   class Row
     # An array of the dimension values, in the order that they appear in the
     # dimension headers.
@@ -14,7 +24,9 @@ module GAAPI
       @row = row
     end
 
-    # Define and call methods for the columns in the report.
+    # Define and call methods to return the value of the dimensions and metrics
+    # in the report.
+    # @!macro method_missing
     def method_missing(method, *args)
       if (i = dimension_method_names.find_index(method))
         define_singleton_method(method) do
@@ -32,9 +44,10 @@ module GAAPI
     end
 
     # An array of the metric values, in the order that they appear in the
-    # metric headers.
+    # metric headers. These are the raw values as returned by the Google Analytics
+    # query, in other words, they're strings.
     def metrics
-      # NOTE: There is one entry in the `row["metrics"]` array for each data range.
+      # NOTE: There is one entry in the `row["metrics"]` array for each date range.
       # Since currently we only support one date range, this following index is
       # always 0.
       row["metrics"][0]["values"]
@@ -45,8 +58,8 @@ module GAAPI
     end
 
     # Return the data from the row as an Array, ordered by:
-    #   Headers first, in the order that they appear in the Report#headers array.
-    #   Metrics next, in the order that they appear in the Rport#metrics array.
+    # - Headers first, in the order that they appear in the Report#headers array.
+    # - Metrics next, in the order that they appear in the Report#metrics array.
     def to_a
       dimensions + metrics
     end

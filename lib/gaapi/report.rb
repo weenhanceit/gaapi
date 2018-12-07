@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module GAAPI
-  # A single report from a query to Google Analytics
+  # A single report from a query to Google Analytics, with convenient methods
+  # to access the dimensions and metrics returned.
   class Report
-    # An array of the dimensions, in the order that they appear in the response.
+    # An array of the dimensions, in the order that they appear in the report.
     def dimensions
       report["columnHeader"]["dimensions"] || []
     end
@@ -14,22 +15,32 @@ module GAAPI
     end
 
     # An array of the dimensions first and then the metrics, in the order that
-    # they appear in the response.
+    # they appear in the report.
     def headers
       dimensions + metrics
     end
 
+    # Initialize a new Report.
+    # @param report [JSON source, Hash] If a Hash, assume it's a valid report
+    #   from a Google Analytics query, and use it as the report.
+    #   Otherwise, attempt to parse it with `JSON.parse`.
+    #   No checking is done on the input to ensure that it's a valid response
+    #   from a Google Analytics query, so subsequent calls to the methods on the
+    #   object returned from `Report.new` may fail in spectacular ways.
     def initialize(report)
-      @report = report
+      @report = report.is_a?(Hash) ? report : JSON.parse(report)
     end
+    # The report as a Ruby Hash, with String keys. It's typically much more
+    # convenient to use the `#rows` method, and the methods on `Row` on each
+    # instance of the a Row.
     attr_reader :report
 
-    # An array of the metric names, in the order that they appear in the response.
+    # The metric type of the i'th metric in the report.
     def metric_type(i)
       report["columnHeader"]["metricHeader"]["metricHeaderEntries"][i]["type"]
     end
 
-    # An array of the metric names, in the order that they appear in the response.
+    # An array of the metric names, in the order that they appear in the report.
     def metrics
       report["columnHeader"]["metricHeader"]["metricHeaderEntries"].map { |metric| metric["name"] }
     end
@@ -39,7 +50,7 @@ module GAAPI
       report["data"]["rows"].map { |row| Row.new(self, row) }
     end
 
-    # The totals, if there were any.
+    # The totals in the report, if there were any.
     def totals
       Array.new(dimensions.size) + report["data"]["totals"][0]["values"]
     end
