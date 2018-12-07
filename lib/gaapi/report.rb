@@ -19,8 +19,7 @@ module GAAPI
       dimensions + metrics
     end
 
-    def initialize(response, report)
-      @response = response
+    def initialize(report)
       @report = report
     end
     attr_reader :report
@@ -49,9 +48,5 @@ module GAAPI
     def totals?
       report["data"]["totals"]
     end
-
-    private
-
-    attr_reader :response
   end
 end

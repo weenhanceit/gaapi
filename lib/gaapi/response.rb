@@ -57,7 +57,7 @@ module GAAPI
     def reports
       @reports ||= if success?
                      to_json["reports"].map do |report|
-                       Report.new(self, report)
+                       Report.new(report)
                      end
                    else
                      []
