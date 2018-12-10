@@ -12,6 +12,12 @@
 
 * Your contribution here!
 
+## [0.5.1][](2018-12-09)
+
+### Bugfixes
+
+* [#9] Handle reports with no rows.
+
 ## [0.5.0][](2018-12-07)
 
 ### Breaking changes
@@ -95,7 +101,8 @@
 
 * N/A.
 
-[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.4.3...HEAD
+[Pending Release]: https://github.com/weenhanceit/gaapi/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/weenhanceit/gaapi/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/weenhanceit/gaapi/compare/v0.4.3...v0.5.0
 [0.4.3]: https://github.com/weenhanceit/gaapi/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/weenhanceit/gaapi/compare/v0.4.1...v0.4.2
