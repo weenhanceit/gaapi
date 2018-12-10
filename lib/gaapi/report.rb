@@ -32,13 +32,13 @@ module GAAPI
     end
     # The report as a Ruby Hash, with String keys. It's typically much more
     # convenient to use the `#rows` method, and the methods on `Row` on each
-    # instance of the a Row.
+    # instance of a Row.
     attr_reader :report
 
     # Return if the data is golden, meaning it won't change if the query is re-run
     # at a later time. The is a lag between the end of a date period and when
     # Google Analytics has completely consolidated all the tracking data.
-    def is_data_golden
+    def is_data_golden # rubocop:disable Naming/PredicateName
       report["data"]["isDataGolden"]
     end
 
@@ -61,7 +61,7 @@ module GAAPI
 
     # The data rows in the report.
     def rows
-      report["data"]["rows"].map { |row| Row.new(self, row) }
+      (report["data"]["rows"] || []).map { |row| Row.new(self, row) }
     end
 
     # The totals in the report, if there were any.

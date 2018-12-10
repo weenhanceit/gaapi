@@ -109,6 +109,44 @@ class ResponseTest < Test
     assert_equal 369, report.rows[0].users
   end
 
+  # Issue #9.
+  def test_empty_report
+    empty_response = {
+      "reports" => [{
+        "columnHeader" => {
+          "dimensions" => %w[ga:nthWeek ga:medium ga:source],
+          "metricHeader" => {
+            "metricHeaderEntries" => [
+              { "name" => "ga:sessions", "type" => "INTEGER" },
+              { "name" => "ga:sessionDuration", "type" => "INTEGER" },
+              { "name" => "ga:users", "type" => "INTEGER" }
+            ]
+          }
+        },
+        "data" => {
+          "isDataGolden" => false
+        }
+      }]
+    }.freeze
+
+    stub_request(:post, GA_REQUEST_URI)
+      .with(headers: {
+              "Authorization": "Bearer test_token"
+            })
+      .to_return(body: empty_response.to_json, status: 200)
+
+    result = GAAPI::Query.new(REQUEST_FOR_TOTALS, "000000", "test_token", "2017-10-01", "2017-10-31").execute
+    # TODO: This might be bad.
+    REQUEST_FOR_TOTALS["reportRequests"][0]["pageSize"] = 10_000
+    assert_requested(:post, GA_REQUEST_URI, body: REQUEST_FOR_TOTALS)
+    assert_equal empty_response.to_json, result.body
+    report = result.reports[0]
+    assert_equal empty_response["reports"][0], report.report
+    assert_equal %w[ga:nthWeek ga:medium ga:source] + %w[ga:sessions ga:sessionDuration ga:users],
+      report.headers
+    assert_equal 0, report.rows.size
+  end
+
   def test_csv_with_totals
     expected_csv = <<~CSV
       ga:nthWeek,ga:medium,ga:source,ga:sessions,ga:sessionDuration,ga:users
